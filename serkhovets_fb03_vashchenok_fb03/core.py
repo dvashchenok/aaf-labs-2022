@@ -90,7 +90,7 @@ class SQL:
         print(f"Sorry... no table {title} :(")
         return False
 
-    def function_print_table(self, title, request):
+    def function_print_table(self, title, request: str):
 
         def print_table(titles: list, data: list):
             if len(data) == 0:
@@ -160,14 +160,15 @@ class SQL:
 
         def logic_and_or(table_1: list, table_2: list, AND: bool):
             if AND:
+                new_table = []
                 for item in table_1:
                     check = True
                     for items in table_2:
                         if item not in items:
                             check = False
                     if check:
-                        table_2.append(item)
-                return table_2
+                        new_table.append(item)
+                return new_table
             else:
                 table_2 += table_1
                 return [el for el, _ in groupby(table_2)]
@@ -218,7 +219,7 @@ class SQL:
                     if token in OPERATORS:
                         y, x = stack.pop(), stack.pop()
                         stack.append(OPERATORS[token][1](x, y))
-                        # print(f"STACK: {stack}")
+                        print(f"Logic: {stack}")
                     else:
                         stack.append(token)
                 return stack[0]
@@ -228,12 +229,8 @@ class SQL:
         # ------------------------------------------------------------
         for table in self.tables:
             if str(table) == title:
-                print_table(table.get_titles(), eval_(request))
+                print_table(table.get_titles(), eval_(request.replace("AND", "&").replace("and", "&").replace("or", "|").replace("OR", "|")))
                 break
-        #         l += [table.get_titles()]
-        # print_table(l[0])
-        # return eval_("((a > b) OR (c < d))")
-        # return logic(title, vars, symbols)
 
     def get_tables(self):
         return self.tables
@@ -249,6 +246,4 @@ if __name__ == '__main__':
     with open("MySQL.pickle", 'rb') as f:
         MySQL = pickle.load(f)
     MySQL.print_table("t")
-    MySQL.function_print_table("t", "((a > b) OR (c < d))")
-    # print(MySQL.function_print_table("t", ['b', 'Pushok'], ['>']))
-    # print(MySQL.function_print_table("t", ['c', 'AAA'], ['<']))
+    MySQL.function_print_table("t", "(a < mmm) AND (b = mmm)")
