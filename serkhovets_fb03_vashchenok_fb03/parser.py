@@ -130,6 +130,7 @@ def parsing(command: str):
             # SELECT table WHERE
             elif i == 4:
                 command_args = command[command.find("WHERE") + 6:].replace(";", "")
+                command_args = command_args[command_args.find("where") + 6:].replace(";", "")
                 # print(selected)
                 print("Info from 'SELECT':")
                 MySQL.function_print_table(re.findall(pattern_nums[2], command)[2], command_args)
